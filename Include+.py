@@ -11,9 +11,10 @@ import os
 import joblib 
 import hashlib
 
-import sys  
-sys.setdefaultencoding('utf8')
-
+import sys
+# sys.setdefaultencoding() does not exist, here!
+reload(sys)  # Reload does the trick!
+sys.setdefaultencoding('UTF8')
 
 # DB
 from manage_db import *
