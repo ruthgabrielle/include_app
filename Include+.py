@@ -11,6 +11,9 @@ import os
 import joblib 
 import hashlib
 
+import sys  
+sys.setdefaultencoding('utf8')
+
 
 # DB
 from manage_db import *
