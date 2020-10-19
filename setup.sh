@@ -1,8 +1,8 @@
-mkdir -p ~/.Include+/
+mkdir -p ~/.streamlit/
 
 echo "\
 [server]\n\
 port = $PORT\n\
 enableCORS = false\n\
 \n\
-" > ~./Include+/config.toml
+" > ~./streamlit/config.toml
