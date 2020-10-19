@@ -1,1 +1,1 @@
-web: setup.sh && streamlit run Include+.py
+web: sh setup.sh && streamlit run Include+.py
