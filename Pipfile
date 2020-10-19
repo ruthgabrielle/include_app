@@ -8,6 +8,7 @@ verify_ssl = true
 [packages]
 streamlit = "*"
 pandas = "*"
+joblib = "*"
 
 [requires]
 python_version = "2.7"
