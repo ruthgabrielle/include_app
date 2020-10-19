@@ -306,7 +306,7 @@ def main():
 
         if st.button("Confirmar"):
             create_usertable()
-            hashed_new_password = generate_hashes(setdefaultencoding('UTF8'), new_password)
+            hashed_new_password = generate_hashes(cert.encode('UTF8'), new_password)
             add_userdata(new_username,hashed_new_password)
             st.success("Seu cadastro foi concluído com sucesso")
             st.info("Entre na sua conta para começar a explorar")
