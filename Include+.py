@@ -128,7 +128,7 @@ def main():
         password = st.sidebar.text_input("Senha", type='password')
         if st.sidebar.checkbox("Login"):
             create_usertable()
-            hashed_pswd = generate_hashes(str.encode(password))
+            hashed_pswd = generate_hashes(str(password))
             result = login_user(username,verify_hashes(password, hashed_pswd))
 
             if result:
@@ -306,7 +306,7 @@ def main():
 
         if st.button("Confirmar"):
             create_usertable()
-            hashed_new_password = generate_hashes(str.encode(new_password))
+            hashed_new_password = generate_hashes(str(new_password))
             add_userdata(new_username,hashed_new_password)
             st.success("Seu cadastro foi concluído com sucesso")
             st.info("Entre na sua conta para começar a explorar")
