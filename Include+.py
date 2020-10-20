@@ -129,7 +129,7 @@ def main():
         if st.sidebar.checkbox("Login"):
             create_usertable()
             hashed_pswd = generate_hashes(str(password))
-            result = login_user(username,verify_hashes(password, hashed_pswd))
+            result = login_user(username,verify_hashes(str(password), hashed_pswd))
 
             if result:
                 st.success("Bem Vindo {}".format(username))
