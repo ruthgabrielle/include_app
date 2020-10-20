@@ -259,22 +259,22 @@ def main():
                 if st.button("Analisar"):
                     if model_choice == "LR":
                             if activity == "Crianças Pequenas":
-                                loaded_model = load_model("models/Toddlers_Prediction_LR_Model.joblib")
+                                loaded_model = load_model("models/Toddlers_Prediction_LR_Model.joblib", protocol=2)
                                 prediction = loaded_model.predict(single_sample)
                                 pred_prob=loaded_model.predict_proba(single_sample)
                                 st.write(prediction)
                             elif activity == "Crianças":
-                                loaded_model = load_model("models/Children_Prediction_LR_Model.joblib")
+                                loaded_model = load_model("models/Children_Prediction_LR_Model.joblib", protocol=2)
                                 prediction = loaded_model.predict(single_sample)
                                 pred_prob=loaded_model.predict_proba(single_sample)
                                 st.write(prediction)
                             elif activity == "Adolescentes":
-                                loaded_model = load_model("models/Adolescent_Prediction_LR_Model.joblib")
+                                loaded_model = load_model("models/Adolescent_Prediction_LR_Model.joblib", protocol=2)
                                 prediction = loaded_model.predict(single_sample)
                                 pred_prob=loaded_model.predict_proba(single_sample)
                                 st.write(prediction)
                             elif activity == "Adultos":
-                                loaded_model = load_model("models/Adult_Prediction_LR_Model.joblib")
+                                loaded_model = load_model("models/Adult_Prediction_LR_Model.joblib", protocol=2)
                                 prediction = loaded_model.predict(single_sample)
                                 pred_prob=loaded_model.predict_proba(single_sample)
                                 st.write(prediction)
