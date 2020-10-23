@@ -13,11 +13,6 @@ import hashlib
 
 
 
-# Data Viz Pkgs
-import matplotlib.pyplot as plt 
-import matplotlib
-matplotlib.use('Agg')
-
 # DB
 from manage_db import *
 
