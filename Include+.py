@@ -103,7 +103,7 @@ def load_model(model_file):
 
 def main():
     """Sistema para Detecção do Transtorno de Espectro Autista"""
-    st.title("Sistema para Detecção do Transtorno de Espectro Autista")
+    st.title("Sistema para Detecção do Transtorno de Espectro Autista", encoding="utf-8")
 
 
     menu = ["Home", "Login", "SignUp"]
