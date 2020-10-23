@@ -11,10 +11,12 @@ import os
 import joblib 
 import hashlib
 
-import sys
-# sys.setdefaultencoding() does not exist, here!
-reload(sys)  # Reload does the trick!
-sys.setdefaultencoding('UTF8')
+
+
+# Data Viz Pkgs
+import matplotlib.pyplot as plt 
+import matplotlib
+matplotlib.use('Agg')
 
 # DB
 from manage_db import *
@@ -128,8 +130,8 @@ def main():
         password = st.sidebar.text_input("Senha", type='password')
         if st.sidebar.checkbox("Login"):
             create_usertable()
-            hashed_pswd = generate_hashes(str(password))
-            result = login_user(username,verify_hashes(str(password), hashed_pswd))
+            hashed_pswd = generate_hashes(password)
+            result = login_user(username,verify_hashes(password, hashed_pswd))
 
             if result:
                 st.success("Bem Vindo {}".format(username))
@@ -137,20 +139,22 @@ def main():
                 activity = st.selectbox("Formulário", submenu)
                 
                 if activity == "Crianças Pequenas":
-                    st.subheader("Ánalise e Classificação para crianças a partir ")
-
+                    st.subheader("Ánalise e Classificação para crianças a partir dos 18 meses")
+                    st.write("Checklist for Autism in Toddlers (CHAT)")
+                    st.write("As perguntas são quantificadas da seguinte maneira: As perguntas de 1 a 9, caso a resposta esteja nas colunas C, D ou E, 1 ponto é contado. Para a pergunta 10, caso a resposta esteja nas colunas A, B ou C, 1 ponto é contato. Ao somar os pontos e ver que a criança obteve mais do que 3 das 10 perguntas, deve se considerar levá-la para uma avaliação multidisciplinar com um profissional da saúde.")
+                   
                     
-                    a1 = st.radio("A sua criança olha para si quando chama o nome dela?", tuple(answer_dict_frequencia.keys()))
-                    a2 = st.radio("Quão fácil para si é conseguir contato ocular com sua criança?",tuple(answer_dict_facilidade.keys()))
-                    a3 = st.radio("A sua criança aponta para indicar alguma coisa? (Ex. um brinquedo que está fora do alcance)", tuple(answer_dict_semana.keys()))
-                    a4 = st.radio("A sua criança aponta para compartilhar um interesse consigo? (Ex. aponta para algum lugar interessante)", tuple(answer_dict_semana.keys()))
-                    a5 = st.radio("A sua criança brinca de 'faz de conta?'", tuple(answer_dict_semana.keys()))
-                    a6 = st.radio(" A sua criança segue seu olhar?", tuple(answer_dict_semana.keys()))
-                    a7 = st.radio("Se você ou alguém da sua família estiver visivelmente aborrecido, sua criança mostra sinais de querer confortá-lo?", tuple(answer_dict_frequencia.keys()))
-                    a8 = st.radio("Descreveria as primeiras palavras da sua criança como:", tuple(answer_dict_fala.keys()))
-                    a9 = st.radio("A sua criança usa gestos simples? (Ex. dar tchau com a mão)", tuple(answer_dict_semana.keys()))
-                    a10 = st.radio("A sua criança olha fixamente para o nada sem nenhuma razão?", tuple(answer_dict_semana_10.keys()))
-                    age_mons = st.number_input("Idade em meses",12,40)
+                    a1 = st.radio("1. A sua criança olha para si quando chama o nome dela?", tuple(answer_dict_frequencia.keys()))
+                    a2 = st.radio("2. Quão fácil para si é conseguir contato ocular com sua criança?",tuple(answer_dict_facilidade.keys()))
+                    a3 = st.radio("3. A sua criança aponta para indicar alguma coisa? (Ex. um brinquedo que está fora do alcance)", tuple(answer_dict_semana.keys()))
+                    a4 = st.radio("4. A sua criança aponta para compartilhar um interesse consigo? (Ex. aponta para algum lugar interessante)", tuple(answer_dict_semana.keys()))
+                    a5 = st.radio("5. A sua criança brinca de 'faz de conta?'", tuple(answer_dict_semana.keys()))
+                    a6 = st.radio("6. A sua criança segue seu olhar?", tuple(answer_dict_semana.keys()))
+                    a7 = st.radio("7. Se você ou alguém da sua família estiver visivelmente aborrecido, sua criança mostra sinais de querer confortá-lo?", tuple(answer_dict_frequencia.keys()))
+                    a8 = st.radio("8. Descreveria as primeiras palavras da sua criança como:", tuple(answer_dict_fala.keys()))
+                    a9 = st.radio("9. A sua criança usa gestos simples? (Ex. dar tchau com a mão)", tuple(answer_dict_semana.keys()))
+                    a10 = st.radio("10. A sua criança olha fixamente para o nada sem nenhuma razão?", tuple(answer_dict_semana_10.keys()))
+                    age_mons = st.number_input("Idade em meses",18,40)
                     sex = st.radio("Sexo", tuple(sex_dict.keys()))
                     jaundice = st.radio("Já notou algum aspecto de icterícia? (Condição que deixa os olhos amarelaados)", tuple(feature_dict.keys()))
                     st.image("jaundice.jpeg", width=100)
@@ -168,17 +172,19 @@ def main():
                 elif activity == "Crianças":
                     st.subheader("Ánalise e Classificação para crianças a partir ")
                     st.write("Vale lembrar que esse questionário deve ser respondido pelos pais com base na observação do desenvolvimento da criança.")
+                    st.write("AQ -10 (AUTISM SPECTRUM QUOTIENT)") 
+                    st.write("O cálculo é realizado da seguinte maneira: 1 ponto é contado por cada resposta “Concordo totalmente” ou “Concordo levemente” em cada um dos seguintes itens: 1, 5, 8 e 10. Conte 1 ponto por cada resposta “Discordo totalmente” ou “Discordo levemente” em cada um dos seguintes itens: 2, 3, 4, 6, 7 e 9. Se o resultado total corresponder a uma pontuação superior a 6 pontos, deve ser ponderado um encaminhamento para uma avaliação diagnóstica especializada.")
 
-                    a1_score = st.radio("Ele(a) nota muitas vezes pequenos ruídos que passam despercebidos às outras pessoas.", tuple(answer_dict_AQ10_pt1.keys()))
-                    a2_score = st.radio("Habitualmente, ele(a) concentra-se mais na imagem ou situação no seu todo, do que nos seus pequenos detalhes.",tuple(answer_dict_AQ10_pt2.keys()))
-                    a3_score = st.radio("Quando está num grupo social, ele(a) consegue facilmente seguir conversas de várias pessoas.", tuple(answer_dict_AQ10_pt2.keys()))
-                    a4_score = st.radio("Ele(a) consegue facilmente fazer mais do que uma coisa ao mesmo tempo.", tuple(answer_dict_AQ10_pt2.keys()))
-                    a5_score = st.radio("Frequentemente, ele(a) nota que não sabe como manter uma conversa.", tuple(answer_dict_AQ10_pt1.keys()))
-                    a6_score = st.radio("Socialmente, ele(a) é bom/boa conversador(a).", tuple(answer_dict_AQ10_pt2.keys()))
-                    a7_score = st.radio("Durante a leitura de uma história, ele(a) tem dificuldades em perceber as intenções e as emoções das personagens.", tuple(answer_dict_AQ10_pt2.keys()))
-                    a8_score = st.radio("Na pré-escola, ele(a) gostava de brincar a jogos de faz-de-conta com as outras crianças.", tuple(answer_dict_AQ10_pt1.keys()))
-                    a9_score= st.radio("Ele(a) percebe facilmente o que alguém está pensando ou a sentindo, apenas olhando para a sua cara.", tuple(answer_dict_AQ10_pt2.keys()))
-                    a10_score = st.radio("Ele(a) tem dificuldades em fazer novos amigos.", tuple(answer_dict_AQ10_pt1.keys()))
+                    a1_score = st.radio("1. Ele(a) nota muitas vezes pequenos ruídos que passam despercebidos às outras pessoas.", tuple(answer_dict_AQ10_pt1.keys()))
+                    a2_score = st.radio("2. Habitualmente, ele(a) concentra-se mais na imagem ou situação no seu todo, do que nos seus pequenos detalhes.",tuple(answer_dict_AQ10_pt2.keys()))
+                    a3_score = st.radio("3. Quando está num grupo social, ele(a) consegue facilmente seguir conversas de várias pessoas.", tuple(answer_dict_AQ10_pt2.keys()))
+                    a4_score = st.radio("4. Ele(a) consegue facilmente fazer mais do que uma coisa ao mesmo tempo.", tuple(answer_dict_AQ10_pt2.keys()))
+                    a5_score = st.radio("5. Frequentemente, ele(a) nota que não sabe como manter uma conversa.", tuple(answer_dict_AQ10_pt1.keys()))
+                    a6_score = st.radio("6. Socialmente, ele(a) é bom/boa conversador(a).", tuple(answer_dict_AQ10_pt2.keys()))
+                    a7_score = st.radio("7. Durante a leitura de uma história, ele(a) tem dificuldades em perceber as intenções e as emoções das personagens.", tuple(answer_dict_AQ10_pt2.keys()))
+                    a8_score = st.radio("8. Na pré-escola, ele(a) gostava de brincar a jogos de faz-de-conta com as outras crianças.", tuple(answer_dict_AQ10_pt1.keys()))
+                    a9_score= st.radio("9. Ele(a) percebe facilmente o que alguém está pensando ou a sentindo, apenas olhando para a sua cara.", tuple(answer_dict_AQ10_pt2.keys()))
+                    a10_score = st.radio("10. Ele(a) tem dificuldades em fazer novos amigos.", tuple(answer_dict_AQ10_pt1.keys()))
                     age = st.number_input("Idade",4,11)
                     gender = st.radio("Sexo", tuple(sex_dict.keys()))
                     jundice = st.radio("Já notou algum aspecto de icterícia? (Condição que deixa os olhos amarelaados)", tuple(feature_dict.keys()))
@@ -194,20 +200,22 @@ def main():
                     single_sample = np.array(feature_list).reshape(1,-1)
     
                 elif activity == "Adolescentes":
-                    st.subheader("Ánalise e Classificação para adolescentes de 12 a 15 anos")
+                    st.subheader("Ánalise e Classificação para adolescentes de 11 a 15 anos")
                     st.write("Vale lembrar que esse questionário deve ser respondido pelos pais com base no observado durante o dia-a-dia")
+                    st.write("AQ -10 (AUTISM SPECTRUM QUOTIENT)") 
+                    st.write("O cálculo é realizado da seguinte maneira: 1 ponto é contado por cada resposta “Concordo totalmente” ou “Concordo levemente” em cada um dos seguintes itens: 1, 5, 8 e 10. Conte 1 ponto por cada resposta “Discordo totalmente” ou “Discordo levemente” em cada um dos seguintes itens: 2, 3, 4, 6, 7 e 9. Se o resultado total corresponder a uma pontuação superior a 6 pontos, deve ser ponderado um encaminhamento para uma avaliação diagnóstica especializada.")
 
 
-                    a1_score = st.radio("Ele(a) repara sempre em padrões/categorias nas coisas.", tuple(answer_dict_AQ10_pt1.keys()))
-                    a2_score = st.radio("Habitualmente, ele(a) concentra-se mais na imagem ou situação no seu todo, do que nos seus pequenos detalhes.",tuple(answer_dict_AQ10_pt2.keys()))
-                    a3_score = st.radio("Quando está num grupo social, ele(a) consegue facilmente seguir conversas de várias pessoas.", tuple(answer_dict_AQ10_pt2.keys()))
-                    a4_score = st.radio("Em caso de interrupção, ele(a) consegue muito rapidamente voltar ao que estava a fazer.", tuple(answer_dict_AQ10_pt2.keys()))
-                    a5_score = st.radio("Frequentemente, ele(a) nota que não sabe como manter uma conversa.", tuple(answer_dict_AQ10_pt1.keys()))
-                    a6_score = st.radio("Socialmente, ele(a) é bom/boa conversador(a).", tuple(answer_dict_AQ10_pt2.keys()))
-                    a7_score = st.radio("Quando era mais novo(a), ele(a) gostava de brincar a jogos de faz-de-conta com as outras crianças.", tuple(answer_dict_AQ10_pt2.keys()))
-                    a8_score = st.radio("Ele(a) tem dificuldades em imaginar como seria ser outra pessoa.", tuple(answer_dict_AQ10_pt1.keys()))
-                    a9_score= st.radio("Ele(a) acha as situações sociais fáceis.", tuple(answer_dict_AQ10_pt2.keys()))
-                    a10_score = st.radio("Ele(a) tem dificuldades em fazer novos amigos.", tuple(answer_dict_AQ10_pt1.keys()))
+                    a1_score = st.radio("1. Ele(a) repara sempre em padrões/categorias nas coisas.", tuple(answer_dict_AQ10_pt1.keys()))
+                    a2_score = st.radio("2. Habitualmente, ele(a) concentra-se mais na imagem ou situação no seu todo, do que nos seus pequenos detalhes.",tuple(answer_dict_AQ10_pt2.keys()))
+                    a3_score = st.radio("3. Quando está num grupo social, ele(a) consegue facilmente seguir conversas de várias pessoas.", tuple(answer_dict_AQ10_pt2.keys()))
+                    a4_score = st.radio("4. Em caso de interrupção, ele(a) consegue muito rapidamente voltar ao que estava a fazer.", tuple(answer_dict_AQ10_pt2.keys()))
+                    a5_score = st.radio("5. Frequentemente, ele(a) nota que não sabe como manter uma conversa.", tuple(answer_dict_AQ10_pt1.keys()))
+                    a6_score = st.radio("6. Socialmente, ele(a) é bom/boa conversador(a).", tuple(answer_dict_AQ10_pt2.keys()))
+                    a7_score = st.radio("7. Quando era mais novo(a), ele(a) gostava de brincar a jogos de faz-de-conta com as outras crianças.", tuple(answer_dict_AQ10_pt2.keys()))
+                    a8_score = st.radio("8. Ele(a) tem dificuldades em imaginar como seria ser outra pessoa.", tuple(answer_dict_AQ10_pt1.keys()))
+                    a9_score= st.radio("9. Ele(a) acha as situações sociais fáceis.", tuple(answer_dict_AQ10_pt2.keys()))
+                    a10_score = st.radio("10. Ele(a) tem dificuldades em fazer novos amigos.", tuple(answer_dict_AQ10_pt1.keys()))
                     age = st.number_input("Idade",12,15)
                     gender = st.radio("Sexo", tuple(sex_dict.keys()))
                     jundice = st.radio("Já notou algum aspecto de icterícia? (Condição que deixa os olhos amarelaados)", tuple(feature_dict.keys()))
@@ -227,17 +235,19 @@ def main():
                 elif activity == "Adultos":
                     st.subheader("Ánalise e Classificação para adultos a partir dos 16 anos")
                     st.write("Quando o questionário é respondido pelo próprio indivíduo, é importante ser preciso na resposta e não deixar coagir por fatores sociais, como pressão ou medo.")
+                    st.write("AQ -10 (AUTISM SPECTRUM QUOTIENT)") 
+                    st.write("O cálculo é realizado da seguinte maneira: 1 ponto é contado por cada resposta “Concordo totalmente” ou “Concordo levemente” em cada um dos seguintes itens: 1, 5, 8 e 10. Conte 1 ponto por cada resposta “Discordo totalmente” ou “Discordo levemente” em cada um dos seguintes itens: 2, 3, 4, 6, 7 e 9. Se o resultado total corresponder a uma pontuação superior a 6 pontos, deve ser ponderado um encaminhamento para uma avaliação diagnóstica especializada.")
 
-                    a1_score = st.radio("Eu costumo notar pequenos sons quando outros não conseguem notar.", tuple(answer_dict_AQ10_pt1.keys()))
-                    a2_score = st.radio("Eu costumo me concentrar mais em todo o cenário do que em pequenos detalhes.",tuple(answer_dict_AQ10_pt2.keys()))
-                    a3_score = st.radio("Eu acho fácil fazer mais de uma coisa ao mesmo tempo.", tuple(answer_dict_AQ10_pt2.keys()))
-                    a4_score = st.radio("Se houver uma interrupção enquanto estou fazendo algo, posso voltar para o que eu estava fazendo muito rapidamente.", tuple(answer_dict_AQ10_pt2.keys()))
-                    a5_score = st.radio("Eu acho fácil 'ler nas entrelinhas' quando alguém está falando comigo.", tuple(answer_dict_AQ10_pt1.keys()))
-                    a6_score = st.radio("Eu sei como saber se alguém me ouvindo está ficando entediado.", tuple(answer_dict_AQ10_pt2.keys()))
-                    a7_score = st.radio("Quando estou lendo uma história, acho difícil descobrir as intenções dos personagens.", tuple(answer_dict_AQ10_pt2.keys()))
-                    a8_score = st.radio("Eu gosto de coletar informações sobre categorias de coisas (Ex. tipos de carro, tipos de plantas etc.).", tuple(answer_dict_AQ10_pt1.keys()))
-                    a9_score= st.radio("Eu acho fácil descobrir o que alguém está pensando ou sentindo apenas olhando para o rosto deles.", tuple(answer_dict_AQ10_pt2.keys()))
-                    a10_score = st.radio("Eu acho difícil descobrir as intenções das pessoas.", tuple(answer_dict_AQ10_pt1.keys()))
+                    a1_score = st.radio("1. Eu costumo notar pequenos sons quando outros não conseguem notar.", tuple(answer_dict_AQ10_pt1.keys()))
+                    a2_score = st.radio("2. Eu costumo me concentrar mais em todo o cenário do que em pequenos detalhes.",tuple(answer_dict_AQ10_pt2.keys()))
+                    a3_score = st.radio("3. Eu acho fácil fazer mais de uma coisa ao mesmo tempo.", tuple(answer_dict_AQ10_pt2.keys()))
+                    a4_score = st.radio("4. Se houver uma interrupção enquanto estou fazendo algo, posso voltar para o que eu estava fazendo muito rapidamente.", tuple(answer_dict_AQ10_pt2.keys()))
+                    a5_score = st.radio("5. Eu acho fácil 'ler nas entrelinhas' quando alguém está falando comigo.", tuple(answer_dict_AQ10_pt1.keys()))
+                    a6_score = st.radio("6. Eu sei como saber se alguém me ouvindo está ficando entediado.", tuple(answer_dict_AQ10_pt2.keys()))
+                    a7_score = st.radio("7. Quando estou lendo uma história, acho difícil descobrir as intenções dos personagens.", tuple(answer_dict_AQ10_pt2.keys()))
+                    a8_score = st.radio("8. Eu gosto de coletar informações sobre categorias de coisas (Ex. tipos de carro, tipos de plantas etc.).", tuple(answer_dict_AQ10_pt1.keys()))
+                    a9_score= st.radio("9. Eu acho fácil descobrir o que alguém está pensando ou sentindo apenas olhando para o rosto deles.", tuple(answer_dict_AQ10_pt2.keys()))
+                    a10_score = st.radio("10. Eu acho difícil descobrir as intenções das pessoas.", tuple(answer_dict_AQ10_pt1.keys()))
                     age = st.number_input("Idade",16,50)
                     gender = st.radio("Sexo", tuple(sex_dict.keys()))
                     jundice = st.radio("Já notou algum aspecto de icterícia? (Condição que deixa os olhos amarelaados)", tuple(feature_dict.keys()))
@@ -306,7 +316,7 @@ def main():
 
         if st.button("Confirmar"):
             create_usertable()
-            hashed_new_password = generate_hashes(str(new_password))
+            hashed_new_password = generate_hashes(new_password)
             add_userdata(new_username,hashed_new_password)
             st.success("Seu cadastro foi concluído com sucesso")
             st.info("Entre na sua conta para começar a explorar")
