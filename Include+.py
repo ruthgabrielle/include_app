@@ -255,12 +255,6 @@ def main():
                     austim = st.radio("Algum mebro da família já apresentou o Transtorno de Espectro Autista?", tuple(feature_dict.keys()))
                     
 
-                    feature_list = [get_fvalue(a1_score),get_fvalue(a2_score),get_fvalue(a3_score),get_fvalue(a4_score),get_fvalue(a5_score),get_fvalue(a6_score),get_fvalue(a7_score),get_fvalue(a8_score),get_fvalue(a9_score),get_fvalue(a10_score),age,get_value(gender,sex_dict),get_fvalue(jundice),get_fvalue(austim)]
-                    st.write(len(feature_list))
-                    st.write(feature_list)
-                    pretty_result = {"Q1":a1_score,"Q2":a2_score,"Q3":a3_score,"Q4":a4_score,"Q5":a5_score,"Q6":a6_score,"Q7":a7_score,"Q8":a8_score,"Q9":a9_score,"Q10":a10_score,"Idade":age,"Sexo":gender,"Apresentou Icterícia":jundice,"Algum membro da família apresentou o TEA":austim}
-                    st.json(pretty_result)
-                    single_sample = np.array(feature_list).reshape(1,-1)
 
 
 
