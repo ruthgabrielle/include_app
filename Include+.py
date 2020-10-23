@@ -22,7 +22,7 @@ def generate_hashes(password):
 
 
 def verify_hashes(password,hashed_text):
-	if generate_hashes(password) == hashed_text:
+	if generate_hashes(str(password)) == hashed_text:
 		return hashed_text
 	return False
 
@@ -125,8 +125,8 @@ def main():
         password = st.sidebar.text_input("Senha", type='password')
         if st.sidebar.checkbox("Login"):
             create_usertable()
-            hashed_pswd = generate_hashes(password)
-            result = login_user(username,verify_hashes(password, hashed_pswd))
+            hashed_pswd = generate_hashes(str(password))
+            result = login_user(username,verify_hashes(str(password), hashed_pswd))
 
             if result:
                 st.success("Bem Vindo {}".format(username))
