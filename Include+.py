@@ -102,7 +102,7 @@ def load_model(model_file):
     return loaded_model
 
 def main():
-    st.subtitle("Sistema para Detecção do Transtorno de Espectro Autista")
+    st.write("Sistema para Detecção do Transtorno de Espectro Autista")
 
 
     menu = ["Home", "Login", "SignUp"]
