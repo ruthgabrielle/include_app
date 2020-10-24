@@ -10,7 +10,16 @@ import numpy as np
 import os
 import joblib 
 import hashlib
+import sklearn
+from sklearn.linear_model import LogisticRegression
 
+import sys
+reload(sys)
+sys.setdefaultencoding("UTF-8")
+
+# Data Viz Pkgs
+import matplotlib
+matplotlib.use('Agg')
 
 
 # DB
@@ -93,8 +102,6 @@ def get_fvalue(val):
     
 
 
-    
-
 
 def load_model(model_file):
    
@@ -102,7 +109,7 @@ def load_model(model_file):
     return loaded_model
 
 def main():
-    st.write("Sistema para Detecção do Transtorno de Espectro Autista")
+    st.title("Sistema para Detecção do Transtorno de Espectro Autista")
 
 
     menu = ["Home", "Login", "SignUp"]
@@ -155,12 +162,7 @@ def main():
                     family_mem_with_asd = st.radio("Algum mebro da família já apresentou o Transtorno de Espectro Autista?", tuple(feature_dict.keys()))
                     who_completed_the_test = st.text_input("Quem está respondendo o teste?")
 
-                    feature_list = [get_fvalue(a1),get_fvalue(a2),get_fvalue(a3),get_fvalue(a4),get_fvalue(a5),get_fvalue(a6),get_fvalue(a7),get_fvalue(a8),get_fvalue(a9),get_fvalue(a10),age_mons,get_value(sex,sex_dict),get_fvalue(jaundice),get_fvalue(family_mem_with_asd)]
-                    st.write(len(feature_list))
-                    st.write(feature_list)
-                    pretty_result = {"Q1":a1,"Q2":a2,"Q3":a3,"Q4":a4,"Q5":a5,"Q6":a6,"Q7":a7,"Q8":a8,"Q9":a9,"Q10":a10,"Idade":age_mons,"Sexo":sex,"Apresentou Icterícia":jaundice,"Algum membro da família apresentou o TEA":family_mem_with_asd}
-                    st.json(pretty_result)
-                    single_sample = np.array(feature_list).reshape(1,-1)
+                
    
                 
                 elif activity == "Crianças":
@@ -184,14 +186,8 @@ def main():
                     jundice = st.radio("Já notou algum aspecto de icterícia? (Condição que deixa os olhos amarelaados)", tuple(feature_dict.keys()))
                     st.image("jaundice.jpeg", width=100)
                     austim = st.radio("Algum mebro da família já apresentou o Transtorno de Espectro Autista?", tuple(feature_dict.keys()))
-                    
+                    who_completed_the_test = st.text_input("Quem está respondendo o teste?")
 
-                    feature_list = [get_fvalue(a1_score),get_fvalue(a2_score),get_fvalue(a3_score),get_fvalue(a4_score),get_fvalue(a5_score),get_fvalue(a6_score),get_fvalue(a7_score),get_fvalue(a8_score),get_fvalue(a9_score),get_fvalue(a10_score),age,get_value(gender,sex_dict),get_fvalue(jundice),get_fvalue(austim)]
-                    st.write(len(feature_list))
-                    st.write(feature_list)
-                    pretty_result = {"Q1":a1_score,"Q2":a2_score,"Q3":a3_score,"Q4":a4_score,"Q5":a5_score,"Q6":a6_score,"Q7":a7_score,"Q8":a8_score,"Q9":a9_score,"Q10":a10_score,"Idade":age,"Sexo":gender,"Apresentou Icterícia":jundice,"Algum membro da família apresentou o TEA":austim}
-                    st.json(pretty_result)
-                    single_sample = np.array(feature_list).reshape(1,-1)
     
                 elif activity == "Adolescentes":
                     st.subheader("Ánalise e Classificação para adolescentes de 11 a 15 anos")
@@ -215,14 +211,9 @@ def main():
                     jundice = st.radio("Já notou algum aspecto de icterícia? (Condição que deixa os olhos amarelaados)", tuple(feature_dict.keys()))
                     st.image("jaundice.jpeg", width=100)
                     austim = st.radio("Algum mebro da família já apresentou o Transtorno de Espectro Autista?", tuple(feature_dict.keys()))
-                    
+                    who_completed_the_test = st.text_input("Quem está respondendo o teste?")
+ 
 
-                    feature_list = [get_fvalue(a1_score),get_fvalue(a2_score),get_fvalue(a3_score),get_fvalue(a4_score),get_fvalue(a5_score),get_fvalue(a6_score),get_fvalue(a7_score),get_fvalue(a8_score),get_fvalue(a9_score),get_fvalue(a10_score),age,get_value(gender,sex_dict),get_fvalue(jundice),get_fvalue(austim)]
-                    st.write(len(feature_list))
-                    st.write(feature_list)
-                    pretty_result = {"Q1":a1_score,"Q2":a2_score,"Q3":a3_score,"Q4":a4_score,"Q5":a5_score,"Q6":a6_score,"Q7":a7_score,"Q8":a8_score,"Q9":a9_score,"Q10":a10_score,"Idade":age,"Sexo":gender,"Apresentou Icterícia":jundice,"Algum membro da família apresentou o TEA":austim}
-                    st.json(pretty_result)
-                    single_sample = np.array(feature_list).reshape(1,-1)
 
 
                     
@@ -247,7 +238,8 @@ def main():
                     jundice = st.radio("Já notou algum aspecto de icterícia? (Condição que deixa os olhos amarelaados)", tuple(feature_dict.keys()))
                     st.image("jaundice.jpeg", width=100)
                     austim = st.radio("Algum mebro da família já apresentou o Transtorno de Espectro Autista?", tuple(feature_dict.keys()))
-                    
+                    who_completed_the_test = st.text_input("Quem está respondendo o teste?")
+
 
 
 
@@ -304,7 +296,7 @@ def main():
 
         if st.button("Confirmar"):
             create_usertable()
-            hashed_new_password = generate_hashes(new_password)
+            hashed_new_password = generate_hashes(str(new_password))
             add_userdata(new_username,hashed_new_password)
             st.success("Seu cadastro foi concluído com sucesso")
             st.info("Entre na sua conta para começar a explorar")
